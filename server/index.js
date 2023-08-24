@@ -92,11 +92,11 @@ app.post('/queryrefund', async function (req, res) {
   res.send(info)
 })
 
-app.all('/', function (req, res) {
-  console.log('回调请求头', req.headers)
-  console.log('回调收到内容', req.body || req.query)
-  res.send('success')
-})
+// app.all('/', function (req, res) {
+//   console.log('回调请求头', req.headers)
+//   console.log('回调收到内容', req.body || req.query)
+//   res.send('success')
+// })
 
 app.listen(80, function () {
   console.log('服务启动成功！')
@@ -126,7 +126,16 @@ function callpay (action, paybody) {
 // 设置静态文件目录
 app.use(express.static(path.join(__dirname, 'web')));
 
-// 处理GET请求
-app.get('/userpay', (req, res) => {
-  res.sendFile(path.join(__dirname, 'web', 'index.html'));
+// 处理回调，都转发走
+const httpProxy = require('http-proxy');
+
+const proxy = httpProxy.createProxyServer();
+const targetUrl = 'https://lzynodered1.azurewebsites.net/wxpay';
+
+app.get('/', (req, res) => {
+  proxy.web(req, res, { target: targetUrl });
+});
+
+app.post('/', (req, res) => {
+  proxy.web(req, res, { target: targetUrl });
 });
