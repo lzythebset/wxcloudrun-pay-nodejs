@@ -1,5 +1,6 @@
 const express = require('express')
 const request = require('request')
+const path = require('path');
 
 const app = express()
 app.use(express.json())
@@ -119,3 +120,13 @@ function callpay (action, paybody) {
     })
   })
 }
+
+
+//加页面
+// 设置静态文件目录
+app.use(express.static(path.join(__dirname, 'web')));
+
+// 处理GET请求
+app.get('/userpay', (req, res) => {
+  res.sendFile(path.join(__dirname, 'web', 'index.html'));
+});
