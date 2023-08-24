@@ -121,21 +121,16 @@ function callpay (action, paybody) {
   })
 }
 
-
-//加页面
-// 设置静态文件目录
-app.use(express.static(path.join(__dirname, 'web')));
-
 // 处理回调，都转发走
-const httpProxy = require('http-proxy');
-
-const proxy = httpProxy.createProxyServer();
-const targetUrl = 'https://lzynodered1.azurewebsites.net/wxpay';
-
-app.get('/', (req, res) => {
-  proxy.web(req, res, { target: targetUrl });
-});
-
-app.post('/', (req, res) => {
-  proxy.web(req, res, { target: targetUrl });
+const axios = require('axios');
+app.get('/', async (req, res) => {
+  try {
+    // 发送请求数据到指定URL
+    console.log(req.query);
+    const response = await axios.get('https://lzynodered1.azurewebsites.net/wxpay' + req.url);
+    res.send('success');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
 });
