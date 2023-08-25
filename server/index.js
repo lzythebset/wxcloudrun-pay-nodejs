@@ -92,24 +92,24 @@ app.post('/queryrefund', async function (req, res) {
   res.send(info)
 })
 
-// app.all('/', function (req, res) {
-//   console.log('回调请求头', req.headers)
-//   console.log('回调收到内容', req.body || req.query)
-//   res.send('success')
-// })
-// 处理回调，都转发走
-const axios = require('axios');
-app.get('/', async (req, res) => {
-  try {
-    // 发送请求数据到指定URL
-    console.log(req.query);
-    const response = await axios.get('https://lzynodered1.azurewebsites.net/wxpay' + req.url);
-    res.send('success');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+app.all('/', function (req, res) {
+  console.log('回调请求头', req.headers)
+  console.log('回调收到内容', req.body || req.query)
+  res.send('success')
+})
+// // 处理回调，都转发走
+// const axios = require('axios');
+// app.get('/', async (req, res) => {
+//   try {
+//     // 发送请求数据到指定URL
+//     console.log(req.query);
+//     const response = await axios.get('https://lzynodered1.azurewebsites.net/wxpay' + req.url);
+//     res.send('success');
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
 app.listen(80, function () {
   console.log('服务启动成功！')
